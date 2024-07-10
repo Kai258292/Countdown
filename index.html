@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown bis zum 12. Juli 2024 um 20 Uhr</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            overflow: hidden;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .countdown {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        .countdown h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        #timer {
+            font-size: 1.5em;
+            color: #333;
+        }
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: explode 1.5s ease-out infinite;
+            opacity: 0;
+        }
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--x), var(--y));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .countdown {
+                width: 80%;
+                padding: 15px;
+            }
+            .countdown h1 {
+                font-size: 1.5em;
+            }
+            #timer {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown">
+        <h1>Countdown bis zum 12. Juli 2024 um 20 Uhr</h1>
+        <p id="timer"></p>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            const targetDate = new Date('July 12, 2024 20:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML = `
+                ${days} Tage, 
+                ${hours} Stunden, 
+                ${minutes} Minuten, 
+                ${seconds} Sekunden
+            `;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('timer').innerHTML = "Der Countdown ist abgelaufen!";
+                startFireworks();
+            }
+        }
+
+        function startFireworks() {
+            for (let i = 0; i < 500; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.setProperty('--x', `${Math.random() * 200 - 100}vw`);
+                firework.style.setProperty('--y', `${Math.random() * 200 - 100}vh`);
+                document.body.appendChild(firework);
+                setTimeout(() => document.body.removeChild(firework), 1500);
+            }
+            setTimeout(startFireworks, 1500);
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
